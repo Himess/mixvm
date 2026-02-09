@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { parseEther, formatEther } from 'viem'
+import { parseUnits } from 'viem'
 import { usePrivateUSDC } from '../hooks/usePrivateUSDC'
 
 interface RecipientNoteData {
@@ -41,7 +41,7 @@ function Send() {
     setCopied(false)
 
     try {
-      const amountWei = parseEther(amount)
+      const amountWei = parseUnits(amount, 6)
       const result = await transfer(recipient, amountWei)
       setTxResult({
         txHash: result.txHash,
@@ -243,7 +243,7 @@ function Send() {
                   <pre>{JSON.stringify(txResult.recipientNoteData, null, 2)}</pre>
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  Amount: {formatEther(BigInt(txResult.recipientNoteData.balance))} USDC
+                  Amount: {(Number(txResult.recipientNoteData.balance) / 1e6).toFixed(6)} USDC
                 </p>
               </div>
             )}

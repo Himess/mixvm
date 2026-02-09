@@ -83,11 +83,10 @@ const ERC20_ABI = [
   'function withdraw(uint256 amount)',
 ]
 
-// StealthRegistry addresses
-// OLD registry (for reading existing registrations)
-const STEALTH_REGISTRY_READ_ADDRESS = '0xd209CbDD434F646388775A8223c4644491c89fB1'
-// NEW registry (for announcements - has the announce function)
-const STEALTH_REGISTRY_ANNOUNCE_ADDRESS = '0x137e9693080E9beA3D6cB399EF1Ca33CE72c5477'
+// StealthRegistry address (deployed on Base Sepolia)
+const STEALTH_REGISTRY_ADDRESS = '0x5ceCfD0bF5E815D935E4b0b85F5a604B784CA6E5'
+const STEALTH_REGISTRY_RPC = 'https://sepolia.base.org'
+const STEALTH_REGISTRY_CHAIN_ID = 84532
 const STEALTH_REGISTRY_ABI = [
   'function isUserRegistered(address user) view returns (bool)',
   'function getStealthMetaAddress(address user) view returns (tuple(uint256 spendingPubKeyX, uint256 spendingPubKeyY, uint256 viewingPubKeyX, uint256 viewingPubKeyY, uint256 registeredAt))',
@@ -904,8 +903,8 @@ export function usePrivateUSDC() {
       // Try StealthRegistry first - use JsonRpcProvider to avoid MetaMask issues
       try {
         // Use dedicated provider for read calls (more reliable than MetaMask)
-        const readProvider = new ethers.JsonRpcProvider('https://arc-testnet.drpc.org', 5042002)
-        const stealthRegistry = new ethers.Contract(STEALTH_REGISTRY_READ_ADDRESS, STEALTH_REGISTRY_ABI, readProvider)
+        const readProvider = new ethers.JsonRpcProvider(STEALTH_REGISTRY_RPC, STEALTH_REGISTRY_CHAIN_ID)
+        const stealthRegistry = new ethers.Contract(STEALTH_REGISTRY_ADDRESS, STEALTH_REGISTRY_ABI, readProvider)
 
         const isRegistered = await stealthRegistry.isUserRegistered(recipientAddress)
         console.log('Recipient registered in StealthRegistry:', isRegistered)
@@ -924,7 +923,7 @@ export function usePrivateUSDC() {
 
             // Make raw call
             const rawResult = await readProvider.call({
-              to: STEALTH_REGISTRY_READ_ADDRESS,
+              to: STEALTH_REGISTRY_ADDRESS,
               data: callData,
             })
 
@@ -1159,19 +1158,19 @@ export function usePrivateUSDC() {
 
             // Announce to NEW StealthRegistry (which has the announce function)
             console.log('Announcing to StealthRegistry with stealth address...')
-            console.log('StealthRegistry ANNOUNCE address:', STEALTH_REGISTRY_ANNOUNCE_ADDRESS)
+            console.log('StealthRegistry ANNOUNCE address:', STEALTH_REGISTRY_ADDRESS)
 
             // Verify we're on the right network
             const signerNetwork = await signer.provider?.getNetwork()
             console.log('Signer network:', signerNetwork?.chainId?.toString())
 
-            const stealthRegistry = new ethers.Contract(STEALTH_REGISTRY_ANNOUNCE_ADDRESS, STEALTH_REGISTRY_ABI, signer)
+            const stealthRegistry = new ethers.Contract(STEALTH_REGISTRY_ADDRESS, STEALTH_REGISTRY_ABI, signer)
 
             // Test: verify contract is accessible by reading announcement count
             try {
-              const directProvider = new ethers.JsonRpcProvider('https://arc-testnet.drpc.org', 5042002)
+              const directProvider = new ethers.JsonRpcProvider(STEALTH_REGISTRY_RPC, STEALTH_REGISTRY_CHAIN_ID)
               const readRegistry = new ethers.Contract(
-                STEALTH_REGISTRY_ANNOUNCE_ADDRESS,
+                STEALTH_REGISTRY_ADDRESS,
                 ['function getAnnouncementCount() view returns (uint256)'],
                 directProvider
               )
@@ -1179,7 +1178,7 @@ export function usePrivateUSDC() {
               console.log('StealthRegistry accessible, current announcement count:', count.toString())
 
               // Verify the contract has the announce function by checking bytecode contains the selector
-              const bytecode = await directProvider.getCode(STEALTH_REGISTRY_ANNOUNCE_ADDRESS)
+              const bytecode = await directProvider.getCode(STEALTH_REGISTRY_ADDRESS)
               const announceSelector = '2cd46d6c' // First 4 bytes of keccak256("announce(uint256,address,bytes,uint256,bytes)")
               const hasAnnounce = bytecode.toLowerCase().includes(announceSelector)
               console.log('Contract has announce function (selector 0x2cd46d6c):', hasAnnounce)
@@ -1191,8 +1190,8 @@ export function usePrivateUSDC() {
             console.log('Attempting announce via contract method...')
             try {
               // Use direct provider for simulation first
-              const directProvider = new ethers.JsonRpcProvider('https://arc-testnet.drpc.org', 5042002)
-              const testRegistry = new ethers.Contract(STEALTH_REGISTRY_ANNOUNCE_ADDRESS, STEALTH_REGISTRY_ABI, directProvider)
+              const directProvider = new ethers.JsonRpcProvider(STEALTH_REGISTRY_RPC, STEALTH_REGISTRY_CHAIN_ID)
+              const testRegistry = new ethers.Contract(STEALTH_REGISTRY_ADDRESS, STEALTH_REGISTRY_ABI, directProvider)
 
               // Simulate the call
               await testRegistry.announce.staticCall(
@@ -1222,10 +1221,10 @@ export function usePrivateUSDC() {
             // Try to estimate gas using direct RPC (more reliable than MetaMask)
             let gasLimit = 800000n // Default high gas limit
             try {
-              const directProvider = new ethers.JsonRpcProvider('https://arc-testnet.drpc.org', 5042002)
+              const directProvider = new ethers.JsonRpcProvider(STEALTH_REGISTRY_RPC, STEALTH_REGISTRY_CHAIN_ID)
               const estimatedGas = await directProvider.estimateGas({
                 from: await signer.getAddress(),
-                to: STEALTH_REGISTRY_ANNOUNCE_ADDRESS,
+                to: STEALTH_REGISTRY_ADDRESS,
                 data: announceData,
               })
               console.log('Estimated gas for announce (direct RPC):', estimatedGas.toString())
@@ -1237,10 +1236,10 @@ export function usePrivateUSDC() {
 
               // Try to simulate the call to get more details
               try {
-                const directProvider = new ethers.JsonRpcProvider('https://arc-testnet.drpc.org', 5042002)
+                const directProvider = new ethers.JsonRpcProvider(STEALTH_REGISTRY_RPC, STEALTH_REGISTRY_CHAIN_ID)
                 await directProvider.call({
                   from: await signer.getAddress(),
-                  to: STEALTH_REGISTRY_ANNOUNCE_ADDRESS,
+                  to: STEALTH_REGISTRY_ADDRESS,
                   data: announceData,
                 })
                 console.log('eth_call succeeded - transaction should work')
@@ -1254,7 +1253,7 @@ export function usePrivateUSDC() {
 
             console.log('Sending announce transaction with gas limit:', gasLimit.toString())
             const announceTx = await signer.sendTransaction({
-              to: STEALTH_REGISTRY_ANNOUNCE_ADDRESS,
+              to: STEALTH_REGISTRY_ADDRESS,
               data: announceData,
               gasLimit,
             })

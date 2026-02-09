@@ -1,6 +1,6 @@
 import { usePrivateUSDC } from '../hooks/usePrivateUSDC'
 import { useBalance } from 'wagmi'
-import { formatEther } from 'viem'
+import { formatUnits } from 'viem'
 import { useSDKStore } from '../lib/store'
 
 function Dashboard() {
@@ -43,8 +43,8 @@ function Dashboard() {
   const recentActivity = transactions.slice(0, 5).map((tx) => ({
     type: tx.type.charAt(0).toUpperCase() + tx.type.slice(1),
     amount: tx.type === 'deposit' || tx.type === 'receive'
-      ? `+${(Number(tx.amount) / 1e18).toFixed(4)}`
-      : `-${(Number(tx.amount) / 1e18).toFixed(4)}`,
+      ? `+${(Number(tx.amount) / 1e6).toFixed(4)}`
+      : `-${(Number(tx.amount) / 1e6).toFixed(4)}`,
     date: new Date(tx.timestamp).toLocaleDateString(),
     status: tx.status.charAt(0).toUpperCase() + tx.status.slice(1),
     txHash: tx.txHash,
@@ -61,7 +61,7 @@ function Dashboard() {
               <h2 className="text-sm font-medium text-slate-400 mb-2">Wallet Balance</h2>
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-bold text-white">
-                  {walletBalance ? parseFloat(formatEther(walletBalance.value)).toFixed(4) : '0.00'}
+                  {walletBalance ? parseFloat(formatUnits(walletBalance.value, 6)).toFixed(4) : '0.00'}
                 </span>
                 <span className="text-lg text-slate-400">USDC</span>
               </div>
@@ -198,7 +198,7 @@ function Dashboard() {
             {notes.map((note, i) => (
               <div key={i} className="text-xs font-mono text-slate-500 p-2 bg-slate-800 rounded">
                 <div>Leaf #{note.leafIndex}</div>
-                <div className="truncate">Balance: {(Number(note.balance) / 1e18).toFixed(6)} USDC</div>
+                <div className="truncate">Balance: {(Number(note.balance) / 1e6).toFixed(6)} USDC</div>
                 <div className="truncate">Commitment: {note.commitment.slice(0, 20)}...</div>
               </div>
             ))}

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { useSDKStore } from '../lib/store'
+import { loadStealthKeys } from '../lib/stealth'
 
 function Settings() {
   const { isConnected, address } = useAccount()
@@ -10,6 +11,23 @@ function Settings() {
   const [relayerUrl, setRelayerUrl] = useState('http://localhost:3000')
   const [showExportModal, setShowExportModal] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [exportCopied, setExportCopied] = useState(false)
+
+  const exportData = useMemo(() => {
+    if (!address) return null
+    const keys = loadStealthKeys(address)
+    if (!keys) return null
+    return JSON.stringify({
+      address,
+      stealthKeys: {
+        spendingPublicKey: Array.from(keys.spendingPublicKey).map(b => b.toString(16).padStart(2, '0')).join(''),
+        viewingPublicKey: Array.from(keys.viewingPublicKey).map(b => b.toString(16).padStart(2, '0')).join(''),
+        spendingPrivateKey: Array.from(keys.spendingPrivateKey).map(b => b.toString(16).padStart(2, '0')).join(''),
+        viewingPrivateKey: Array.from(keys.viewingPrivateKey).map(b => b.toString(16).padStart(2, '0')).join(''),
+      },
+      notes: notes,
+    }, null, 2)
+  }, [address, notes])
 
   if (!isConnected) {
     return (
@@ -128,7 +146,7 @@ function Settings() {
           <p>MixVM Privacy Layer v0.1.0</p>
           <p>Compliant Cross-chain Private USDC</p>
           <a
-            href="https://github.com/mixvm"
+            href="https://github.com/Himess/mixvm"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-400 hover:text-primary-300"
@@ -142,33 +160,42 @@ function Settings() {
       {showExportModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="card max-w-md w-full mx-4">
-            <h3 className="text-lg font-medium text-white mb-4">Export Keys</h3>
-            <p className="text-sm text-slate-400 mb-4">
-              Your encrypted viewing and spending keys will be exported.
-              Keep them safe and never share them.
-            </p>
-            <div className="bg-slate-900 rounded-lg p-4 mb-4">
-              <p className="text-xs text-slate-500 mb-2">Encrypted Keys (Demo)</p>
-              <code className="text-xs text-slate-300 break-all">
-                eyJzcGVuZGluZyI6IjB4Li4uIiwidmlld2luZyI6IjB4Li4uIn0=
-              </code>
-            </div>
+            <h3 className="text-lg font-medium text-white mb-4">Export Keys & Notes</h3>
+            {exportData ? (
+              <>
+                <p className="text-sm text-slate-400 mb-4">
+                  Your stealth keys and note data. Keep this safe and never share it publicly.
+                </p>
+                <div className="bg-slate-900 rounded-lg p-4 mb-4 max-h-60 overflow-y-auto">
+                  <code className="text-xs text-slate-300 break-all whitespace-pre-wrap">
+                    {exportData}
+                  </code>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-slate-400 mb-4">
+                No stealth keys found for this wallet. Register your stealth keys first by making a deposit or using the Receive page.
+              </p>
+            )}
             <div className="flex gap-3">
               <button
-                onClick={() => setShowExportModal(false)}
+                onClick={() => { setShowExportModal(false); setExportCopied(false) }}
                 className="btn-secondary flex-1"
               >
                 Close
               </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText('eyJzcGVuZGluZyI6IjB4Li4uIiwidmlld2luZyI6IjB4Li4uIn0=')
-                  setShowExportModal(false)
-                }}
-                className="btn-primary flex-1"
-              >
-                Copy
-              </button>
+              {exportData && (
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(exportData)
+                    setExportCopied(true)
+                    setTimeout(() => setExportCopied(false), 2000)
+                  }}
+                  className="btn-primary flex-1"
+                >
+                  {exportCopied ? 'Copied!' : 'Copy'}
+                </button>
+              )}
             </div>
           </div>
         </div>
