@@ -1,0 +1,37 @@
+{
+  "name": "@mixvm/private-usdc-sdk",
+  "version": "0.1.0",
+  "description": "SDK for MixVM Private USDC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "usdc",
+    "privacy",
+    "zk",
+    "arc",
+    "cctp"
+  ],
+  "author": "MixVM",
+  "license": "MIT",
+  "dependencies": {
+    "circomlibjs": "^0.1.7",
+    "ethers": "^6.13.0",
+    "snarkjs": "^0.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "ethers": "^6.0.0"
+  },
+  "files": [
+    "dist",
+    "circuits"
+  ]
+}

@@ -1,0 +1,103 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build artifacts
+artifacts/
+cache/
+out/
+typechain-types/
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Logs
+*.log
+deploy_log.txt
+deploy_output.txt
+deploy_result.txt
+compile_log.txt
+compile_output.txt
+deploy-output.log
+
+# Old plan/debug docs (not part of active codebase)
+PLAN.md
+PLAN_FIXED.md
+PLAN_FIXED2.md
+plan2.md
+plan3.md
+plan4.md
+TODO.md
+START_HERE.md
+START_PHASE2.md
+PHASE3_PROOF_PLAN.md
+PHASE4_COMPLETE.md
+PHASE4_ONCHAIN_TEST.md
+POSEIDON_FIX.md
+FINDINGS.md
+ARC-FHE-EXPERIMENT.md
+CCTP_ROUTES.md
+DEBUG_SUMMARY.md
+WITHDRAW_FLOW.md
+LAYERZERO_MIGRATION_PLAN.md
+LAYERZERO_STATUS.md
+LAYERZERO_DEBUG_REPORT.md
+LAYERZERO-DVN-FIX.md
+LAYERZERO-SIMULATION-FIX.md
+LZ_DEBUG_REPORT.md
+FHEARC-LAYERZERO.md
+fhearc_debug_analysis.md
+Tempo_Confidential_Grant_Proposal.md
+CLAUDE_CODE_TASKS.md
+CLAUDE_CODE_PHASE2_TASKS.md
+
+# Misc text files
+*.txt
+
+# Circom compiler binary
+circom-compiler/
+
+# Privacy POC (old)
+privacy-poc/
+
+# Old deploy scripts
+deploy-inline.cjs
+deploy-v2.cjs
+
+# Foundry
+foundry.toml
+
+# Package locks (will be regenerated)
+package-lock.json
+webapp/package-lock.json
+webapp-layerzero/package-lock.json
+relayer/package-lock.json
+sdk/package-lock.json
+
+# Next.js
+.next/
+
+# Webapp node_modules
+webapp-layerzero/node_modules/
+webapp/node_modules/
+relayer/node_modules/
+sdk/node_modules/
+subgraph/node_modules/
+
+# Claude settings
+.claude/

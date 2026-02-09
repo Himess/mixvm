@@ -1,0 +1,89 @@
+{
+  "deployedAt": "2026-02-08T03:00:00.000Z",
+  "version": "v10.2 - CCTP V2 Return Fix + Merkle Tree Fix + On-Chain Proof Verification",
+
+  "baseSepolia": {
+    "network": "Base Sepolia",
+    "chainId": 84532,
+    "lzEid": 40245,
+    "cctpDomain": 6,
+    "contracts": {
+      "privateLZBridge": "0x4cDf8DB3B884418db41fc1Eb15b3152262979AF1",
+      "transferVerifier": "0xE961c624EB7fAFC6Fdea184C5BeC768dA5db495B",
+      "withdrawVerifier": "0x4aC6108858A2ba9C715d3E1694d413b01919A043",
+      "poseidonHasher": "0xF900978c52C9773C40Df173802f66922D57FDCec",
+      "stealthRegistry": "0x5ceCfD0bF5E815D935E4b0b85F5a604B784CA6E5"
+    },
+    "layerzero": {
+      "endpoint": "0x6EDCE65403992e310A62460808c4b910D972f10f",
+      "sendUln302": "0xC1868e054425D378095A003EcbA3823a5D0135C9",
+      "receiveUln302": "0x12523de19dc41c91F7d2093E0CFbB76b17012C8d",
+      "dvn": "0xe1a12515f9ab2764b887bf60b923ca494ebbb2d6"
+    },
+    "cctp": {
+      "tokenMessenger": "0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA",
+      "messageTransmitter": "0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275",
+      "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+    }
+  },
+
+  "ethereumSepolia": {
+    "network": "Ethereum Sepolia",
+    "chainId": 11155111,
+    "lzEid": 40161,
+    "cctpDomain": 0,
+    "contracts": {
+      "privateLZBridge": "0xBe5233d68db3329c62958157854e1FE483d1b4c9",
+      "transferVerifier": "0x1F17d25E82B24326D899Cc17b75F7FF3a263f56b",
+      "withdrawVerifier": "0x96B97C487506813689092b0DD561a2052E7b25C4",
+      "poseidonHasher": "0xD35f2b612F96149f9869d8Db2B0a63Bef523cb0b"
+    },
+    "layerzero": {
+      "endpoint": "0x6EDCE65403992e310A62460808c4b910D972f10f",
+      "sendUln302": "0xcc1ae8Cf5D3904Cef3360A9532B477529b177cCE",
+      "receiveUln302": "0xdAf00F5eE2158dD58E0d3857851c432E34A3A851",
+      "dvn": "0x8eebf8b423b73bfca51a1db4b7354aa0bfca9193"
+    },
+    "cctp": {
+      "tokenMessenger": "0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA",
+      "messageTransmitter": "0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275",
+      "usdc": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+    }
+  },
+
+  "arbitrumSepolia": {
+    "network": "Arbitrum Sepolia",
+    "chainId": 421614,
+    "lzEid": 40231,
+    "cctpDomain": 3,
+    "contracts": {
+      "privateLZBridge": "0x976f28253965A5bA21ad8ada897CC8383cdF206F",
+      "transferVerifier": "0xA9FC0Ec2A133abFcf801d8ba4c4eb4fD0C0aF467",
+      "withdrawVerifier": "0x55B4BcCdeF026c8cbF5AB495A85aa28F235a4Fed",
+      "poseidonHasher": "0xB83e014c837763C4c86f21C194d7Fb613edFbE2b"
+    },
+    "layerzero": {
+      "endpoint": "0x6EDCE65403992e310A62460808c4b910D972f10f",
+      "sendUln302": "0x4f7cd4DA19ABB31b0eC98b9066B9e857B1bf9C0E",
+      "receiveUln302": "0x75Db67CDab2824970131D5aa9CECfC9F69c69636",
+      "dvn": "0x53f488E93b4f1b60E8E83aa374dBe1780A1EE8a8"
+    },
+    "cctp": {
+      "tokenMessenger": "0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA",
+      "messageTransmitter": "0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275",
+      "usdc": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d"
+    }
+  },
+
+  "legacy": {
+    "v10.1_baseSepolia_bridge": "0x508bC62e96FE0Bb62689dEA58902Ef56331Db8E6",
+    "v10.1_ethSepolia_bridge": "0xDB9A92492Cb472a377044806Ba3345feD17ADFFB",
+    "v10.1_arbSepolia_bridge": "0xb6C5FfcFc6FC12BF117A80E43060Cd8A450A0A12",
+    "v10_baseSepolia_bridge": "0xf01620b80aB2871199b5Fa8d88725de86822D3B8",
+    "v10_ethSepolia_bridge": "0x97075d42663ddD35f931071a329f83Bc640d0CBB",
+    "v10_arbSepolia_bridge": "0xa1Da30c7678a40Aa943D75099348B9f8de92855a",
+    "v9_baseSepolia_bridge": "0x1AB15668906f288dE4dF3064B8B50e91eFBD771D",
+    "v9_ethSepolia_bridge": "0x0896746fb3ac02891201e5c1E0dd8a0AF609F186",
+    "v9_arbSepolia_bridge": "0x3905554071E2F121533EbB26Fcf7947C916299C1"
+  }
+}

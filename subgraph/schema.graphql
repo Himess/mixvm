@@ -1,0 +1,102 @@
+# Commitment entity - tracks each commitment in the merkle tree
+type Commitment @entity {
+  id: ID!                     # commitment hash (bytes32)
+  commitment: Bytes!          # commitment value
+  leafIndex: BigInt!          # leaf index in merkle tree
+  blockNumber: BigInt!        # block number when inserted
+  blockTimestamp: BigInt!     # block timestamp
+  transactionHash: Bytes!     # transaction hash
+  type: String!               # "deposit" | "transfer_sender" | "transfer_recipient" | "withdraw_change"
+}
+
+# MerkleTree entity - tracks current merkle tree state
+type MerkleTree @entity {
+  id: ID!                     # "current" - singleton
+  root: Bytes!                # current merkle root
+  leafCount: BigInt!          # total number of leaves
+  lastUpdateBlock: BigInt!    # last update block number
+  lastUpdateTimestamp: BigInt! # last update timestamp
+}
+
+# Deposit entity - tracks deposits
+type Deposit @entity {
+  id: ID!                     # transaction hash + log index
+  user: Bytes!                # depositor address
+  amount: BigInt!             # deposit amount
+  commitment: Bytes!          # commitment hash
+  leafIndex: BigInt!          # leaf index
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# Transfer entity - tracks private transfers
+type Transfer @entity {
+  id: ID!                     # nullifier hash
+  nullifier: Bytes!           # nullifier
+  newSenderCommitment: Bytes! # sender's new commitment
+  recipientCommitment: Bytes! # recipient's commitment
+  announcementIndex: BigInt!  # stealth announcement index
+  merkleRoot: Bytes!          # merkle root after transfer
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# Withdrawal entity - tracks withdrawals
+type Withdrawal @entity {
+  id: ID!                     # transaction hash + log index
+  user: Bytes!                # recipient address
+  amount: BigInt!             # withdrawal amount
+  nullifier: Bytes!           # nullifier used
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# StealthAnnouncement entity - tracks stealth payment announcements
+type StealthAnnouncement @entity {
+  id: ID!                     # announcement index
+  announcementIndex: BigInt!
+  ephemeralPubKeyX: BigInt!
+  stealthAddressX: BigInt!
+  viewTag: BigInt!
+  commitment: Bytes           # associated commitment (if linked)
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# Nullifier entity - tracks used nullifiers
+type Nullifier @entity {
+  id: ID!                     # nullifier hash
+  nullifier: Bytes!
+  usedInBlock: BigInt!
+  usedInTx: Bytes!
+  usedAt: BigInt!             # timestamp
+}
+
+# Registration entity - tracks registered users
+type Registration @entity {
+  id: ID!                     # user address
+  user: Bytes!
+  spendingKeyX: BigInt!
+  spendingKeyY: BigInt!
+  viewingKeyX: BigInt!
+  viewingKeyY: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# DailyStats entity - aggregated daily statistics
+type DailyStats @entity {
+  id: ID!                     # date string (YYYY-MM-DD)
+  date: String!
+  totalDeposits: BigInt!
+  totalWithdrawals: BigInt!
+  totalTransfers: BigInt!
+  depositVolume: BigInt!
+  withdrawalVolume: BigInt!
+  uniqueUsers: BigInt!
+}
